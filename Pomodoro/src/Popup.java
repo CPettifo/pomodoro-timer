@@ -7,7 +7,7 @@ public class Popup extends TimerTask{
     private String message;
     private String popupColour;
 
-    public Popup (String message, String popupColour){
+    public void setPopup(String message, String popupColour){
         this.message = message;
         this.popupColour = popupColour;
     }
