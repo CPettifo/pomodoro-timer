@@ -5,6 +5,8 @@
 .idea/
 build/
 
+out/
+
 .vscode
 bin/
 .openvscode-server/
