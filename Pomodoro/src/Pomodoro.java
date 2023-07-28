@@ -1,38 +1,61 @@
 import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This is the Main class which will call all other classes as necessary
  */
 public class Pomodoro {
-    Timer timer = new Timer();
-    static Popup start = new Popup(); // The TimerTask-like object for the very first popup
-    Popup shortPause = new Popup(); // The Object for the first break
-    Popup longPause = new Popup();
-    Popup afterBreak = new Popup(); //The Popup to display after a break has completed
+    static Timer timer = new Timer();
+    static Popup shortPause = new Popup(); // The Object for the first break
+    static Popup longPause = new Popup();
+    static Popup afterBreak = new Popup(); //The Popup to display after a break has completed
+    static boolean countingBreak = false;  //A boolean for checking whether the clock is currently counting for breaks
+    static boolean countingWork = true;    //Boolean for when the counter is counting for work
+    static int cycleCounter = 0;
 
 
     public static void main(String[] args){
-        // Set the start popup and run it immediately
-        start.setPopup("Good work on choosing to be productive today, next break in 25 seconds", "#00FF00");
-        start.run();
 
+        // Loop for testing the general flow of the timing system
+        while(true){
+            //while(cycleCounter < 4){
+                while(countingWork){
+                    startWork();
+                }
+                while(countingBreak){
+                    shortBreak();
+                }
+            //}
+            longBreak();
+            cycleCounter = 0;
+        }
     }
 
-
-    public void shortBreak(){
+    public static void shortBreak(){
         shortPause.setPopup("Good work on working so hard! Have a little fiver", "#445F22");
-        timer.schedule(shortPause, 200, 5000);
+        if(countingBreak) {
+            timer.schedule(shortPause,10,  5000);
+            countingBreak=false;
+            countingWork=true;
+        }
     }
 
-    public void longBreak(){
+    public static void longBreak(){
         longPause.setPopup("Awesome! Time for a bigger break now", "#FFFFFF");
-        timer.schedule(longPause, 200, 30000);
+        if(countingBreak){
+            timer.schedule(longPause,10,  30000);
+            countingBreak=false;
+            countingWork=true;
+        }
     }
 
-    public void startWork(){
+    public static void startWork(){
         afterBreak.setPopup("Alright, time to get back to it, see you after you work a bit more", "#545454");
-        timer.schedule(afterBreak, 200, 25000);
+        if(countingWork){
+            timer.schedule(afterBreak,10,  25000);
+            countingWork=false;
+            countingBreak=true;
+            cycleCounter++;
+        }
     }
 
 }
